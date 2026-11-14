@@ -260,6 +260,33 @@
     .detail { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
     .action { color: #d0d0d0; font-size: 11px; }
     .action[aria-hidden="true"] { font-size: 17px; }
+    .catalog {
+      margin-top: 22px;
+      padding: clamp(16px, 3vw, 26px);
+      border: 1px solid rgba(255, 255, 255, .10);
+      border-radius: 18px;
+      background: linear-gradient(158deg, rgba(26, 26, 26, .92), rgba(13, 13, 13, .94));
+      box-shadow: 0 14px 44px rgba(0, 0, 0, .45), inset 0 1px rgba(255, 255, 255, .04);
+    }
+    .catalog-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+    .catalog-head h2 { font-size: 19px; }
+    .catalog-head .index { color: var(--accent); font: 600 11px/1.4 var(--mono); letter-spacing: .13em; }
+    .catalog-count {
+      margin-left: auto;
+      padding: 3px 10px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 999px;
+      font: 600 11px/1.4 var(--mono);
+      letter-spacing: .12em;
+      color: var(--muted);
+    }
     .title-list {
       counter-reset: title;
       display: grid;
@@ -272,21 +299,24 @@
     .title-list li {
       counter-increment: title;
       display: grid;
-      grid-template-columns: 2.6em 1fr;
+      grid-template-columns: 2.2em 1fr;
       align-items: baseline;
       gap: 4px;
-      padding: 9px 14px;
-      border: 1px solid var(--line);
+      padding: 9px 12px;
+      border: 1px solid rgba(255, 255, 255, .07);
       border-radius: 10px;
-      background: rgba(18, 18, 18, .72);
-      font-size: 14px;
+      background: rgba(255, 255, 255, .028);
     }
     .title-list li::before {
       content: counter(title, decimal-leading-zero);
+      grid-column: 1;
+      grid-row: 1;
       font: 600 11px/1.6 var(--mono);
       letter-spacing: .08em;
       color: var(--muted);
     }
+    .title-ru { grid-column: 2; font-size: 14px; }
+    .title-en { grid-column: 2; margin-top: 2px; font-size: 11px; color: var(--muted); }
     .chips {
       display: flex;
       flex-wrap: wrap;
@@ -297,19 +327,12 @@
     }
     .chips li {
       padding: 7px 14px;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(255, 255, 255, .07);
       border-radius: 999px;
-      background: rgba(18, 18, 18, .72);
+      background: rgba(255, 255, 255, .028);
       font-size: 13px;
       color: #dcdcdc;
     }
-    .inline-link {
-      color: #fff;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255, 255, 255, .35);
-    }
-    .inline-link:hover { border-color: #fff; }
-    .inline-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
     footer { margin-top: 25px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); }
     @media (max-width: 420px) {
       main { padding-inline: 15px; }
@@ -397,44 +420,52 @@
     </div>
 
     <div id="view-about" hidden>
-      <section aria-labelledby="anime">
-        <div class="section-heading"><span class="index" aria-hidden="true">01</span><h2 id="anime">Просмотренные аниме</h2></div>
-        <ol class="title-list">
-          <li>ДжоДжо</li>
-          <li>Тетрадь Смерти</li>
-          <li>Человек-бензопила</li>
-          <li>Ван Пис</li>
-          <li>Коносуба</li>
-          <li>Магическая битва</li>
-          <li><span>Ре:зеро <a class="inline-link" href="http://t.me/rezero_tg" target="_blank" rel="noopener">смотреть</a></span></li>
-          <li>Ван пачмен</li>
-          <li>Лимонные девочки</li>
-          <li>Злодейка девяносто девятого уровня</li>
-          <li>Ранма 1/2</li>
-          <li>Хроники Акаши</li>
-          <li>Реинкарнация безработного</li>
-          <li>Доктор Стоун</li>
-          <li>Лазарь</li>
-          <li>Восхождение в Тени</li>
-          <li>Становясь Волшебницей</li>
-          <li>Оверлорд</li>
-          <li>Киберпанк: Бегущие по краю</li>
-          <li>Ума Мусуме</li>
-          <li>Кайдзю №8</li>
-          <li>Гачиакута</li>
-          <li>Семья шпиона</li>
-          <li>Маг-Целитель: Новый старт</li>
-          <li>Пламенная бригада</li>
-          <li>Магия и мускулы</li>
-          <li>Дорохедоро</li>
-          <li>Комбатанты будут высланы</li>
-          <li>Последний Серафим</li>
+      <section class="catalog" aria-labelledby="anime">
+        <header class="catalog-head">
+          <span class="index" aria-hidden="true">01</span>
+          <h2 id="anime">Просмотренные аниме</h2>
+          <span class="catalog-count" data-count="anime-list">29</span>
+        </header>
+        <ol class="title-list" id="anime-list">
+          <li><span class="title-ru">ДжоДжо</span><span class="title-en">JoJo's Bizarre Adventure</span></li>
+          <li><span class="title-ru">Тетрадь Смерти</span><span class="title-en">Death Note</span></li>
+          <li><span class="title-ru">Человек-бензопила</span><span class="title-en">Chainsaw Man</span></li>
+          <li><span class="title-ru">Ван Пис</span><span class="title-en">One Piece</span></li>
+          <li><span class="title-ru">Коносуба</span><span class="title-en">KonoSuba</span></li>
+          <li><span class="title-ru">Магическая битва</span><span class="title-en">Jujutsu Kaisen</span></li>
+          <li><span class="title-ru">Ре:зеро</span><span class="title-en">Re:Zero</span></li>
+          <li><span class="title-ru">Ван пачмен</span><span class="title-en">One Punch Man</span></li>
+          <li><span class="title-ru">Лимонные девочки</span><span class="title-en">Shoujo Ramune</span></li>
+          <li><span class="title-ru">Злодейка девяносто девятого уровня</span><span class="title-en">Villainess Level 99</span></li>
+          <li><span class="title-ru">Ранма 1/2</span><span class="title-en">Ranma ½</span></li>
+          <li><span class="title-ru">Хроники Акаши</span><span class="title-en">Akashic Records of Bastard Magic Instructor</span></li>
+          <li><span class="title-ru">Реинкарнация безработного</span><span class="title-en">Mushoku Tensei: Jobless Reincarnation</span></li>
+          <li><span class="title-ru">Доктор Стоун</span><span class="title-en">Dr. Stone</span></li>
+          <li><span class="title-ru">Лазарь</span><span class="title-en">Lazarus</span></li>
+          <li><span class="title-ru">Восхождение в Тени</span><span class="title-en">The Eminence in Shadow</span></li>
+          <li><span class="title-ru">Становясь Волшебницей</span><span class="title-en">Gushing over Magical Girls</span></li>
+          <li><span class="title-ru">Оверлорд</span><span class="title-en">Overlord</span></li>
+          <li><span class="title-ru">Киберпанк: Бегущие по краю</span><span class="title-en">Cyberpunk: Edgerunners</span></li>
+          <li><span class="title-ru">Ума Мусуме</span><span class="title-en">Uma Musume: Pretty Derby</span></li>
+          <li><span class="title-ru">Кайдзю №8</span><span class="title-en">Kaiju No. 8</span></li>
+          <li><span class="title-ru">Гачиакута</span><span class="title-en">Gachiakuta</span></li>
+          <li><span class="title-ru">Семья шпиона</span><span class="title-en">Spy × Family</span></li>
+          <li><span class="title-ru">Маг-Целитель: Новый старт</span><span class="title-en">Redo of Healer</span></li>
+          <li><span class="title-ru">Пламенная бригада</span><span class="title-en">Fire Force</span></li>
+          <li><span class="title-ru">Магия и мускулы</span><span class="title-en">Mashle: Magic and Muscles</span></li>
+          <li><span class="title-ru">Дорохедоро</span><span class="title-en">Dorohedoro</span></li>
+          <li><span class="title-ru">Комбатанты будут высланы</span><span class="title-en">Combatants Will Be Dispatched!</span></li>
+          <li><span class="title-ru">Последний Серафим</span><span class="title-en">Seraph of the End</span></li>
         </ol>
       </section>
 
-      <section aria-labelledby="games">
-        <div class="section-heading"><span class="index" aria-hidden="true">02</span><h2 id="games">Любимые игры</h2></div>
-        <ul class="chips">
+      <section class="catalog" aria-labelledby="games">
+        <header class="catalog-head">
+          <span class="index" aria-hidden="true">02</span>
+          <h2 id="games">Любимые игры</h2>
+          <span class="catalog-count" data-count="games-list">26</span>
+        </header>
+        <ul class="chips" id="games-list">
           <li>Aground</li>
           <li>Just Shapes and Beats</li>
           <li>Terraria</li>
@@ -509,6 +540,12 @@
       document.title = about ? 'DOZZIcs · Обо мне' : 'DOZZIcs · Био';
       window.scrollTo(0, 0);
     }
+
+    // Счётчики в каталогах всегда совпадают с содержимым.
+    document.querySelectorAll('[data-count]').forEach((badge) => {
+      const list = document.getElementById(badge.dataset.count);
+      if (list) badge.textContent = list.children.length;
+    });
 
     window.addEventListener('hashchange', route);
     route();
