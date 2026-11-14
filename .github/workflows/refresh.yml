@@ -29,6 +29,8 @@ jobs:
           node-version: '20'
 
       - name: Fetch profiles
+        env:
+          DISCORD_USER_ID: ${{ vars.DISCORD_USER_ID }}
         run: node scripts/refresh.js
 
       - name: Commit changes

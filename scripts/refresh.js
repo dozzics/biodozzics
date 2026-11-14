@@ -28,6 +28,10 @@ const LINKS = [
 
 const STATIC = { discord: { nick: 'dozzicsbg', avatar: null } };
 
+// Discord ID (ПКМ по профилю → «Копировать ID пользователя»).
+// Без него аватар Discord взять неоткуда — публичного API у Discord нет.
+const DISCORD_ID = process.env.DISCORD_USER_ID || '';
+
 async function get(url, accept) {
   const res = await fetch(url, {
     headers: { 'user-agent': UA, accept: accept || '*/*', 'accept-language': 'ru,en;q=0.9' },
@@ -68,6 +72,22 @@ function githubProfile(json) {
     nick: json.name || (json.login ? `@${json.login}` : ''),
     avatar: json.avatar_url || '',
   };
+}
+
+async function discordProfile() {
+  const res = await get(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`, 'application/json');
+  const json = JSON.parse(await res.text());
+  if (!json.success) {
+    throw new Error('Lanyard не видит пользователя (нужно зайти на discord.gg/lanyard)');
+  }
+
+  const user = json.data.discord_user;
+  const animated = Boolean(user.avatar && user.avatar.startsWith('a_'));
+  const avatar = user.avatar
+    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${animated ? 'gif' : 'png'}?size=128`
+    : `https://cdn.discordapp.com/embed/avatars/${Number((BigInt(user.id) >> 22n) % 6n)}.png`;
+
+  return { nick: user.username, avatar };
 }
 
 async function loadRemote(id) {
@@ -116,7 +136,34 @@ async function main() {
 
   for (const link of LINKS) {
     if (link.id === 'discord') {
-      links.push({ ...link, ...STATIC.discord });
+      const prev = prevLinks.get('discord');
+      const entry = {
+        ...link,
+        nick: prev?.nick || STATIC.discord.nick,
+        avatar: prev?.avatar || STATIC.discord.avatar,
+      };
+
+      if (DISCORD_ID) {
+        try {
+          const remote = await discordProfile();
+          if (remote.nick) entry.nick = remote.nick;
+          if (remote.avatar) {
+            const image = await downloadImage(remote.avatar);
+            const name = `discord.${image.ext}`;
+            await fs.writeFile(path.join(ROOT, 'assets', name), image.bytes);
+            entry.avatar = `assets/${name}`;
+            imageHashes.push(crypto.createHash('sha1').update(image.bytes).digest('hex'));
+            console.log(`discord: аватар ${name} (${image.bytes.length} байт)`);
+          }
+          console.log(`discord: ник "${entry.nick}"`);
+        } catch (error) {
+          console.warn(`discord: ${error.message}`);
+        }
+      } else {
+        console.log('discord: DISCORD_USER_ID не задан — только ник');
+      }
+
+      links.push(entry);
       continue;
     }
 
