@@ -124,27 +124,39 @@
       .bg-blob, .orbit { animation: none !important; }
     }
     main { position: relative; z-index: 1; max-width: 864px; padding: clamp(25px, 7vh, 76px) 24px 36px; margin: auto; }
-    .masthead, .section-heading, footer {
+    .section-heading, footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 14px;
     }
-    .masthead, footer, .index, .action {
+    footer, .index, .action, .tabs a {
       font: 600 11px/1.4 var(--mono);
       letter-spacing: .13em;
       text-transform: uppercase;
     }
-    .masthead { margin-bottom: 16px; color: var(--muted); }
-    .masthead strong { display: flex; align-items: center; gap: 11px; color: #ededed; }
-    .mark {
-      width: 22px; height: 22px;
-      display: grid; place-items: center;
-      border: 1px solid rgba(255, 255, 255, .28);
-      border-radius: 6px;
-      color: var(--accent);
-      font-size: 16px; line-height: 1;
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 22px;
     }
+    .tabs a {
+      padding: 9px 17px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(18, 18, 18, .72);
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .tabs a:hover { color: #e8e8e8; border-color: rgba(255, 255, 255, .3); }
+    .tabs a[aria-current="page"] {
+      color: #fff;
+      border-color: rgba(255, 255, 255, .45);
+      background: rgba(255, 255, 255, .10);
+    }
+    .tabs a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
     .hero {
       position: relative;
       isolation: isolate;
@@ -248,6 +260,56 @@
     .detail { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
     .action { color: #d0d0d0; font-size: 11px; }
     .action[aria-hidden="true"] { font-size: 17px; }
+    .title-list {
+      counter-reset: title;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .title-list li {
+      counter-increment: title;
+      display: grid;
+      grid-template-columns: 2.6em 1fr;
+      align-items: baseline;
+      gap: 4px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(18, 18, 18, .72);
+      font-size: 14px;
+    }
+    .title-list li::before {
+      content: counter(title, decimal-leading-zero);
+      font: 600 11px/1.6 var(--mono);
+      letter-spacing: .08em;
+      color: var(--muted);
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .chips li {
+      padding: 7px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(18, 18, 18, .72);
+      font-size: 13px;
+      color: #dcdcdc;
+    }
+    .inline-link {
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, .35);
+    }
+    .inline-link:hover { border-color: #fff; }
+    .inline-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
     footer { margin-top: 25px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); }
     @media (max-width: 420px) {
       main { padding-inline: 15px; }
@@ -274,8 +336,12 @@
   </div>
 
   <main>
-    <div class="masthead"><strong><span class="mark" aria-hidden="true">✦</span> DOZZIcs</strong><span>Личная страница</span></div>
+    <nav class="tabs" aria-label="Разделы">
+      <a href="#/" aria-current="page">Главная</a>
+      <a href="#/about">Обо мне</a>
+    </nav>
 
+    <div id="view-home">
     <header class="hero">
       <span class="orbit" aria-hidden="true"></span>
       <div class="avatar"><img src="./assets/avatar.webp" width="400" height="400" alt="Аватар DOZZIcs"></div>
@@ -328,6 +394,76 @@
         </a></li>
       </ul>
     </section>
+    </div>
+
+    <div id="view-about" hidden>
+      <section aria-labelledby="anime">
+        <div class="section-heading"><span class="index" aria-hidden="true">01</span><h2 id="anime">Просмотренные аниме</h2></div>
+        <ol class="title-list">
+          <li>ДжоДжо</li>
+          <li>Тетрадь Смерти</li>
+          <li>Человек-бензопила</li>
+          <li>Ван Пис</li>
+          <li>Коносуба</li>
+          <li>Магическая битва</li>
+          <li>Ре:зеро <a class="inline-link" href="http://t.me/rezero_tg" target="_blank" rel="noopener">смотреть</a></li>
+          <li>Ван пачмен</li>
+          <li>Лимонные девочки</li>
+          <li>Злодейка девяносто девятого уровня</li>
+          <li>Ранма 1/2</li>
+          <li>Хроники Акаши</li>
+          <li>Реинкарнация безработного</li>
+          <li>Доктор Стоун</li>
+          <li>Лазарь</li>
+          <li>Восхождение в Тени</li>
+          <li>Становясь Волшебницей</li>
+          <li>Оверлорд</li>
+          <li>Киберпанк: Бегущие по краю</li>
+          <li>Ума Мусуме</li>
+          <li>Кайдзю №8</li>
+          <li>Гачиакута</li>
+          <li>Семья шпиона</li>
+          <li>Маг-Целитель: Новый старт</li>
+          <li>Пламенная бригада</li>
+          <li>Магия и мускулы</li>
+          <li>Дорохедоро</li>
+          <li>Комбатанты будут высланы</li>
+          <li>Последний Серафим</li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="games">
+        <div class="section-heading"><span class="index" aria-hidden="true">02</span><h2 id="games">Любимые игры</h2></div>
+        <ul class="chips">
+          <li>Aground</li>
+          <li>Just Shapes and Beats</li>
+          <li>Terraria</li>
+          <li>Minecraft</li>
+          <li>Soul Knight</li>
+          <li>Half-Life 1-2</li>
+          <li>Portal 2</li>
+          <li>Mindustry</li>
+          <li>Undertale</li>
+          <li>Undertale yellow</li>
+          <li>Deltarune</li>
+          <li>Don't starve together</li>
+          <li>PvZ</li>
+          <li>Skullgirls</li>
+          <li>Metro 2033 Redux (все игры)</li>
+          <li>Zenless zone zero</li>
+          <li>Billie Bust Up</li>
+          <li>STALCRAFT:X</li>
+          <li>Black Souls</li>
+          <li>Cyberpunk 2077</li>
+          <li>Lobotomy Corporation</li>
+          <li>Warhammer 40,000: Space Marine 2</li>
+          <li>Limbus Company</li>
+          <li>The Forest и Sons of The Forest</li>
+          <li>Black souls 2</li>
+          <li>Detroit: Become Human</li>
+        </ul>
+      </section>
+    </div>
 
     <footer><span>DOZZIcs</span><span aria-hidden="true">✦</span></footer>
   </main>
@@ -354,6 +490,28 @@
         }
       } catch { /* статический фолбэк */ }
     })();
+
+    // Вкладки: #/ — главная, #/about — обо мне.
+    const views = {
+      home: document.getElementById('view-home'),
+      about: document.getElementById('view-about'),
+    };
+    const tabs = [...document.querySelectorAll('.tabs a')];
+
+    function route() {
+      const about = location.hash.replace(/^#\/?/, '') === 'about';
+      views.home.hidden = about;
+      views.about.hidden = !about;
+      tabs.forEach((tab) => {
+        if (tab.getAttribute('href') === (about ? '#/about' : '#/')) tab.setAttribute('aria-current', 'page');
+        else tab.removeAttribute('aria-current');
+      });
+      document.title = about ? 'DOZZIcs · Обо мне' : 'DOZZIcs · Био';
+      window.scrollTo(0, 0);
+    }
+
+    window.addEventListener('hashchange', route);
+    route();
   </script>
 </body>
 </html>
