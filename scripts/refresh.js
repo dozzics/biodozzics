@@ -141,6 +141,7 @@ async function main() {
         ...link,
         nick: prev?.nick || STATIC.discord.nick,
         avatar: prev?.avatar || STATIC.discord.avatar,
+        url: DISCORD_ID ? `https://discord.com/users/${DISCORD_ID}` : null,
       };
 
       if (DISCORD_ID) {
