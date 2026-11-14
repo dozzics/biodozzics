@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-14T15:48:42.501Z",
-  "signature": "218acf55de4b6f8dce99ac35732bfda35d889b0b",
+  "updatedAt": "2026-11-14T15:54:08.826Z",
+  "signature": "49a9a04ca948599de848119c2b7e197abe696845",
   "links": [
     {
       "id": "steam",
@@ -26,7 +26,7 @@
     {
       "id": "discord",
       "label": "Discord",
-      "url": null,
+      "url": "https://discord.com/users/861625624228790272",
       "nick": "dozzicsbg",
       "avatar": "assets/discord.png"
     }
