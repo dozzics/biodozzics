@@ -1,0 +1,44 @@
+name: Refresh profiles
+
+on:
+  schedule:
+    # Раз в 30 минут: подтянуть ники и аватарки со Steam / Telegram / GitHub
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/refresh.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-profiles
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch profiles
+        run: node scripts/refresh.js
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data assets
+          if git diff --staged --quiet; then
+            echo "Изменений нет"
+          else
+            git commit -m "chore: refresh profile data"
+            git push
+          fi

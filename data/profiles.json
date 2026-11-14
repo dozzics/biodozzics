@@ -1,0 +1,34 @@
+{
+  "updatedAt": "2026-11-14T11:52:47.096Z",
+  "signature": "aa53f53781777425c0e7fec06b58c81bc3de19e3",
+  "links": [
+    {
+      "id": "steam",
+      "label": "Steam",
+      "url": "https://steamcommunity.com/id/dozzics/",
+      "nick": "DOZZIcs",
+      "avatar": "assets/steam.jpg"
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "url": "https://github.com/dozzics",
+      "nick": "@dozzics",
+      "avatar": "assets/github.jpg"
+    },
+    {
+      "id": "telegram",
+      "label": "Telegram",
+      "url": "https://t.me/DOZZIcs_offc",
+      "nick": "@DOZZIcs_offc",
+      "avatar": "assets/telegram.jpg"
+    },
+    {
+      "id": "discord",
+      "label": "Discord",
+      "url": null,
+      "nick": "dozzicsbg",
+      "avatar": null
+    }
+  ]
+}

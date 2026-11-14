@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Профили и контакты DOZZIcs.">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>DOZZIcs · Био</title>
+  <link rel="icon" href="./assets/avatar.webp">
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: #f2f2f2;
+      background: #050505;
+      --muted: #a3a3a3;
+      --accent: #e8e8e8;
+      --line: rgba(255, 255, 255, .10);
+      --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      background: #050505;
+      overflow-x: hidden;
+    }
+
+    /* --- Анимированный фон: градиент в серый + размытые пятна по краям --- */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      background:
+        radial-gradient(120% 82% at 80% -12%,
+          rgba(255, 255, 255, .34) 0%,
+          rgba(255, 255, 255, .16) 24%,
+          rgba(255, 255, 255, .05) 48%,
+          transparent 70%),
+        radial-gradient(95% 75% at -4% 46%,
+          rgba(255, 255, 255, .16) 0%,
+          rgba(255, 255, 255, .05) 38%,
+          transparent 66%),
+        linear-gradient(180deg, #2e2e2e 0%, #191919 24%, #0b0b0b 56%, #050505 100%);
+    }
+    .bg-blob {
+      position: absolute;
+      border-radius: 50%;
+      will-change: transform, opacity;
+    }
+    .bg-blob-a {
+      width: 54vmax;
+      height: 54vmax;
+      top: -16vmax;
+      left: -16vmax;
+      background: radial-gradient(circle at 50% 50%,
+        rgba(255, 255, 255, .24) 0%,
+        rgba(255, 255, 255, .11) 30%,
+        rgba(255, 255, 255, .04) 54%,
+        transparent 72%);
+      animation: blob-a 42s ease-in-out infinite;
+    }
+    .bg-blob-b {
+      width: 50vmax;
+      height: 50vmax;
+      top: 28vh;
+      left: -22vmax;
+      background: radial-gradient(circle at 50% 50%,
+        rgba(255, 255, 255, .16) 0%,
+        rgba(255, 255, 255, .065) 32%,
+        rgba(255, 255, 255, .02) 56%,
+        transparent 74%);
+      animation: blob-b 56s ease-in-out infinite;
+    }
+    .bg-blob-c {
+      width: 56vmax;
+      height: 56vmax;
+      bottom: -22vmax;
+      left: 18vw;
+      background: radial-gradient(circle at 50% 50%,
+        rgba(255, 255, 255, .13) 0%,
+        rgba(255, 255, 255, .05) 34%,
+        rgba(255, 255, 255, .016) 58%,
+        transparent 76%);
+      animation: blob-c 49s ease-in-out infinite;
+    }
+    @keyframes blob-a {
+      0%   { transform: translate3d(0, 0, 0) scale(1); opacity: .7; }
+      25%  { transform: translate3d(44vw, 20vh, 0) scale(1.12); opacity: 1; }
+      50%  { transform: translate3d(62vw, 48vh, 0) scale(.94); opacity: .65; }
+      75%  { transform: translate3d(24vw, 34vh, 0) scale(1.08); opacity: .9; }
+      100% { transform: translate3d(0, 0, 0) scale(1); opacity: .7; }
+    }
+    @keyframes blob-b {
+      0%   { transform: translate3d(0, 0, 0) scale(.95); opacity: .55; }
+      30%  { transform: translate3d(36vw, -20vh, 0) scale(1.15); opacity: .95; }
+      60%  { transform: translate3d(60vw, 6vh, 0) scale(1); opacity: .75; }
+      85%  { transform: translate3d(22vw, 24vh, 0) scale(1.1); opacity: .9; }
+      100% { transform: translate3d(0, 0, 0) scale(.95); opacity: .55; }
+    }
+    @keyframes blob-c {
+      0%   { transform: translate3d(0, 0, 0) scale(1); opacity: .5; }
+      25%  { transform: translate3d(-16vw, -26vh, 0) scale(1.18); opacity: .9; }
+      50%  { transform: translate3d(20vw, -46vh, 0) scale(.96); opacity: .6; }
+      75%  { transform: translate3d(42vw, -16vh, 0) scale(1.1); opacity: .85; }
+      100% { transform: translate3d(0, 0, 0) scale(1); opacity: .5; }
+    }
+    .bg-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 26%,
+        transparent 40%, rgba(0, 0, 0, .28) 78%, rgba(0, 0, 0, .6) 100%);
+    }
+    .bg-grain {
+      position: absolute;
+      inset: 0;
+      opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bg-blob, .orbit { animation: none !important; }
+    }
+    main { position: relative; z-index: 1; max-width: 864px; padding: clamp(25px, 7vh, 76px) 24px 36px; margin: auto; }
+    .masthead, .section-heading, footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .masthead, footer, .index, .action {
+      font: 600 11px/1.4 var(--mono);
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .masthead { margin-bottom: 16px; color: var(--muted); }
+    .masthead strong { display: flex; align-items: center; gap: 11px; color: #ededed; }
+    .mark {
+      width: 22px; height: 22px;
+      display: grid; place-items: center;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: 6px;
+      color: var(--accent);
+      font-size: 16px; line-height: 1;
+    }
+    .hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: clamp(22px, 5vw, 48px);
+      min-height: 290px;
+      padding: clamp(24px, 5vw, 50px);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 22px;
+      background: linear-gradient(112deg, #151515 4%, #1c1c1c 56%, #262626);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, .55), inset 0 1px rgba(255, 255, 255, .05);
+    }
+    .orbit {
+      position: absolute;
+      z-index: -1;
+      width: 440px; height: 440px;
+      right: -190px; top: -115px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, .07);
+      box-shadow:
+        0 0 0 26px rgba(255, 255, 255, .035),
+        0 0 0 55px rgba(255, 255, 255, .022),
+        0 0 0 84px rgba(255, 255, 255, .014);
+      animation: orbit-drift 18s ease-in-out infinite alternate;
+    }
+    @keyframes orbit-drift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to   { transform: translate3d(-18px, 14px, 0) scale(1.05); }
+    }
+    .avatar {
+      width: clamp(104px, 22vw, 166px);
+      aspect-ratio: 1;
+      padding: 5px;
+      border-radius: 50%;
+      background: linear-gradient(142deg, #f2f2f2, #8a8a8a 55%, #d4d4d4);
+      box-shadow: 0 0 0 6px rgba(255, 255, 255, .05), 0 10px 32px rgba(0, 0, 0, .7);
+    }
+    .avatar img {
+      display: block; width: 100%; height: 100%;
+      object-fit: cover; border-radius: 50%;
+      border: 3px solid #141414;
+    }
+    .quote {
+      margin: 16px 0 0;
+      color: #cfcfcf;
+      max-width: 33ch;
+      font-size: clamp(14px, 3vw, 18px);
+      line-height: 1.5;
+    }
+    h1 {
+      font-size: clamp(40px, 9vw, 76px);
+      line-height: 1;
+      letter-spacing: -.07em;
+      margin: 0;
+    }
+    section { margin-top: 36px; }
+    .section-heading { margin-bottom: 14px; }
+    h2 { margin: 0; font-size: 23px; letter-spacing: -.025em; }
+    .section-heading::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+    .index { color: var(--accent); }
+    ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .profile {
+      width: 100%;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 15px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(18, 18, 18, .92);
+      color: inherit;
+      text-decoration: none;
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+    .profile:hover, .profile:focus-visible {
+      background: #1f1f1f;
+      border-color: #9a9a9a;
+      transform: translateY(-1px);
+    }
+    .profile:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .icon {
+      position: relative;
+      overflow: hidden;
+      width: 44px; height: 44px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .07);
+      color: #e2e2e2;
+      flex: none;
+    }
+    .icon svg { width: 19px; height: 19px; }
+    .icon img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .label { display: block; font-size: 15px; font-weight: 650; }
+    .detail { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .action { color: #d0d0d0; font-size: 11px; }
+    .action[aria-hidden="true"] { font-size: 17px; }
+    .profile-status { margin: 0; color: var(--muted); font-size: 13px; }
+    .profile-status:not(:empty) { margin-top: 10px; }
+    footer { margin-top: 25px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); }
+    @media (max-width: 420px) {
+      main { padding-inline: 15px; }
+      .hero { gap: 16px; padding: 25px 16px; min-height: 205px; }
+      .avatar { width: clamp(75px, 23vw, 96px); padding: 3px; }
+      h1 { font-size: clamp(34px, 10vw, 43px); }
+      h2 { font-size: 19px; }
+      section { margin-top: 26px; }
+    }
+    @media (max-width: 300px) {
+      .hero { grid-template-columns: 1fr; }
+      .profile { grid-template-columns: auto 1fr; }
+      .action { grid-column: 2; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="bg-blob bg-blob-a"></div>
+    <div class="bg-blob bg-blob-b"></div>
+    <div class="bg-blob bg-blob-c"></div>
+    <div class="bg-vignette"></div>
+    <div class="bg-grain"></div>
+  </div>
+
+  <main>
+    <div class="masthead"><strong><span class="mark" aria-hidden="true">✦</span> DOZZIcs</strong><span>Личная страница</span></div>
+
+    <header class="hero">
+      <span class="orbit" aria-hidden="true"></span>
+      <div class="avatar"><img src="./assets/avatar.webp" width="400" height="400" alt="Аватар DOZZIcs"></div>
+      <div>
+        <h1>DOZZIcs</h1>
+        <blockquote class="quote">«Лишь утратив всё до конца, мы обретаем свободу»</blockquote>
+      </div>
+    </header>
+
+    <section aria-labelledby="profiles">
+      <div class="section-heading"><span class="index" aria-hidden="true">01</span><h2 id="profiles">Профили и контакты</h2></div>
+      <ul>
+        <li><a class="profile" href="https://steamcommunity.com/id/dozzics/" target="_blank" rel="noopener">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="16.5" cy="7.5" r="4.5"/><circle cx="16.5" cy="7.5" r="2"/><circle cx="8" cy="17" r="3.2"/><path d="m10 14 2.3-5.1M11 16l6.1-4M2 14l6 3"/></svg>
+            <img id="av-steam" src="./assets/steam.jpg" alt="" width="44" height="44"
+                 onerror="if(!this.dataset.f){this.dataset.f=1;this.src='./assets/avatar.webp'}else{this.remove()}">
+          </span>
+          <span><span class="label">Steam</span><span class="detail" id="nick-steam">DOZZIcs</span></span>
+          <span class="action" aria-hidden="true">↗</span>
+        </a></li>
+
+        <li><a class="profile" href="https://github.com/dozzics" target="_blank" rel="noopener">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.88c-2.78.6-3.37-1.18-3.37-1.18-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.03a9.59 9.59 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+            <img id="av-github" src="./assets/github.jpg" alt="" width="44" height="44"
+                 onerror="if(!this.dataset.f){this.dataset.f=1;this.src='https://github.com/dozzics.png?size=96'}else{this.remove()}">
+          </span>
+          <span><span class="label">GitHub</span><span class="detail" id="nick-github">@dozzics</span></span>
+          <span class="action" aria-hidden="true">↗</span>
+        </a></li>
+
+        <li><a class="profile" href="https://t.me/DOZZIcs_offc" target="_blank" rel="noopener">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4 3 11l6 2 3 6 3-4 4 3 2-14ZM9 13l8-5"/></svg>
+            <img id="av-telegram" src="./assets/telegram.jpg" alt="" width="44" height="44"
+                 onerror="if(!this.dataset.f){this.dataset.f=1;this.src='./assets/avatar.webp'}else{this.remove()}">
+          </span>
+          <span><span class="label">Telegram</span><span class="detail" id="nick-telegram">@DOZZIcs_offc</span></span>
+          <span class="action" aria-hidden="true">↗</span>
+        </a></li>
+
+        <li><button class="profile" type="button" id="discord">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6c1.5-.6 3.2-.8 5-.8s3.5.2 5 .8c2 2.6 3 5.6 3 9l-4 2-1-1.7m-6 0-1 1.7-4-2c0-3.4 1-6.4 3-9m1.4 8.5c2.1 1 5.1 1 7.2 0"/><circle cx="9" cy="11.7" r=".7"/><circle cx="15" cy="11.7" r=".7"/></svg>
+          </span>
+          <span><span class="label">Discord</span><span class="detail" id="nick-discord">dozzicsbg</span></span>
+          <span class="action">Копировать</span>
+        </button></li>
+      </ul>
+      <p class="profile-status" role="status" id="profile-status"></p>
+    </section>
+
+    <footer><span>DOZZIcs</span><span aria-hidden="true">✦</span></footer>
+  </main>
+
+  <script>
+    (async () => {
+      try {
+        // На GitHub Pages нет бэкенда: данные обновляет GitHub Action
+        // (scripts/refresh.js) и кладёт их в data/profiles.json.
+        const res = await fetch('./data/profiles.json', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        const stamp = encodeURIComponent(data.updatedAt || Date.now());
+        for (const link of data.links) {
+          const nick = document.getElementById('nick-' + link.id);
+          if (nick && link.nick) nick.textContent = link.nick;
+          const img = document.getElementById('av-' + link.id);
+          if (img && link.avatar) img.src = link.avatar + '?v=' + stamp;
+        }
+      } catch { /* статический фолбэк */ }
+    })();
+
+    document.getElementById('discord').addEventListener('click', async () => {
+      const status = document.getElementById('profile-status');
+      try {
+        await navigator.clipboard.writeText('dozzicsbg');
+        status.textContent = 'Ник скопирован. Вставьте его в «Добавить друга» в Discord.';
+      } catch {
+        status.textContent = 'Ник для поиска в Discord: dozzicsbg';
+      }
+    });
+  </script>
+</body>
+</html>
