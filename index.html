@@ -157,6 +157,34 @@
       background: rgba(255, 255, 255, .10);
     }
     .tabs a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .tabs-sub { margin-bottom: 16px; }
+    .tabs-sub a { padding: 7px 14px; font-size: 10px; }
+    .who-lead {
+      max-width: 62ch;
+      margin: 0 0 16px;
+      color: #d5d5d5;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .who-facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 8px;
+      margin: 0;
+    }
+    .who-facts div {
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .028);
+    }
+    .who-facts dt {
+      font: 600 10px/1.4 var(--mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .who-facts dd { margin: 4px 0 0; font-size: 14px; }
     .hero {
       position: relative;
       isolation: isolate;
@@ -420,9 +448,29 @@
     </div>
 
     <div id="view-about" hidden>
-      <section class="catalog" aria-labelledby="anime">
+      <nav class="tabs tabs-sub" aria-label="Каталоги">
+        <a href="#/about/who">Кто я</a>
+        <a href="#/about/anime">Просмотренные аниме</a>
+        <a href="#/about/games">Любимые игры</a>
+      </nav>
+
+      <section class="catalog" data-panel="who" aria-labelledby="who-title">
         <header class="catalog-head">
           <span class="index" aria-hidden="true">01</span>
+          <h2 id="who-title">Кто я</h2>
+        </header>
+        <p class="who-lead">Тут будет пара строк о тебе: кто ты, чем занимаешься, что любишь. Пока это шаблон — замени текст на свой.</p>
+        <dl class="who-facts">
+          <div><dt>Имя</dt><dd>—</dd></div>
+          <div><dt>Возраст</dt><dd>—</dd></div>
+          <div><dt>Город</dt><dd>—</dd></div>
+          <div><dt>Чем занимаюсь</dt><dd>—</dd></div>
+        </dl>
+      </section>
+
+      <section class="catalog" data-panel="anime" aria-labelledby="anime">
+        <header class="catalog-head">
+          <span class="index" aria-hidden="true">02</span>
           <h2 id="anime">Просмотренные аниме</h2>
           <span class="catalog-count" data-count="anime-list">29</span>
         </header>
@@ -459,9 +507,9 @@
         </ol>
       </section>
 
-      <section class="catalog" aria-labelledby="games">
+      <section class="catalog" data-panel="games" aria-labelledby="games">
         <header class="catalog-head">
-          <span class="index" aria-hidden="true">02</span>
+          <span class="index" aria-hidden="true">03</span>
           <h2 id="games">Любимые игры</h2>
           <span class="catalog-count" data-count="games-list">26</span>
         </header>
@@ -522,22 +570,36 @@
       } catch { /* статический фолбэк */ }
     })();
 
-    // Вкладки: #/ — главная, #/about — обо мне.
+    // Маршруты: #/ — главная, #/about/<каталог> — разделы «Обо мне».
     const views = {
       home: document.getElementById('view-home'),
       about: document.getElementById('view-about'),
     };
-    const tabs = [...document.querySelectorAll('.tabs a')];
+    const topTabs = [...document.querySelectorAll('.tabs:not(.tabs-sub) a')];
+    const subTabs = [...document.querySelectorAll('.tabs-sub a')];
+    const panels = [...document.querySelectorAll('[data-panel]')];
+
+    function markCurrent(link, active) {
+      if (active) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    }
 
     function route() {
-      const about = location.hash.replace(/^#\/?/, '') === 'about';
-      views.home.hidden = about;
-      views.about.hidden = !about;
-      tabs.forEach((tab) => {
-        if (tab.getAttribute('href') === (about ? '#/about' : '#/')) tab.setAttribute('aria-current', 'page');
-        else tab.removeAttribute('aria-current');
+      const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+      const isAbout = parts[0] === 'about';
+      const sub = isAbout ? parts[1] || 'who' : '';
+
+      views.home.hidden = isAbout;
+      views.about.hidden = !isAbout;
+      panels.forEach((panel) => {
+        panel.hidden = !isAbout || panel.dataset.panel !== sub;
       });
-      document.title = about ? 'DOZZIcs · Обо мне' : 'DOZZIcs · Био';
+
+      topTabs.forEach((tab) => markCurrent(tab, tab.getAttribute('href') === (isAbout ? '#/about' : '#/')));
+      subTabs.forEach((tab) => markCurrent(tab, tab.getAttribute('href') === `#/about/${sub}`));
+
+      const heading = isAbout ? document.querySelector(`[data-panel="${sub}"] h2`) : null;
+      document.title = isAbout ? `DOZZIcs · ${heading ? heading.textContent : 'Обо мне'}` : 'DOZZIcs · Био';
       window.scrollTo(0, 0);
     }
 
